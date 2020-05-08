@@ -6,8 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using ProAgil.API.Data;
-using ProAgil.API.Model;
+using ProAgil.Repositorio;
 
 namespace ProAgil.API.Controllers
 {
@@ -15,9 +14,9 @@ namespace ProAgil.API.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        public DataContext _context { get; }
+        public IProAgilRepositorio _context { get; }
 
-        public WeatherForecastController(DataContext context)
+        public WeatherForecastController(IProAgilRepositorio context)
         {
             _context = context;
 
@@ -29,7 +28,7 @@ namespace ProAgil.API.Controllers
         {
             try
             {
-                var results = await _context.Eventos.ToListAsync();
+                var results = await _context.GetAllEventosAsync(false);
 
                 return Ok(results);
             }
@@ -40,19 +39,19 @@ namespace ProAgil.API.Controllers
         }
 
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
-        {
-            try
-            {
-                var results = await _context.Eventos.FirstOrDefaultAsync(x => x.EventoId == id);
-                return Ok(results);
-            }
-            catch (System.Exception)
-            {
+        // [HttpGet("{id}")]
+        // public async Task<IActionResult> Get(int id)
+        // {
+        //     try
+        //     {
+        //         var results = await _context.Eventos.FirstOrDefaultAsync(x => x.Id == id);
+        //         return Ok(results);
+        //     }
+        //     catch (System.Exception)
+        //     {
 
-                throw;
-            }
-        }
+        //         throw;
+        //     }
+        // }
     }
 }
